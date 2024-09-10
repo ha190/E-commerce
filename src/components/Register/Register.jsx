@@ -73,7 +73,7 @@ const navigate =useNavigate();
 
   return (
     <>
-      <div className="mx-auto w-[60%] px-14">
+      <div className="w-full mx-auto px-14 md:w-[60%]">
         <div className="pt-28 flex justify-center items-start flex-col">
           <h3 className="text-xl capitalize font-bold px-10 text-left mb-4">
             Register Now

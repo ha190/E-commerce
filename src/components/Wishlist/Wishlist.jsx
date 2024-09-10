@@ -38,9 +38,9 @@ let {addProductToCart}=useContext(CartContext)
           
             {wishlist?.map((product) => (
               <div key={product?.id} className="flex justify-between w-full px-11">
-                <div className="flex justify-between w-full py-10">
-                  <div className="flex justify-start items-center gap-6">
-                    <img src={product?.imageCover} alt="" className="w-1/5" />
+                <div className="flex justify-center flex-col md:flex-row md:flex-between w-full py-10">
+                  <div className="flex justify-center items-center gap-6 md:justify-start">
+                    <img src={product?.imageCover} alt="" className="w-1/2" />
                     <div>
                       <h3 className="py-4 font-semibold">{product?.title}</h3>
                       <h3 className="font-semibold text-green-700">{product?.price} EGP</h3>
@@ -52,9 +52,9 @@ let {addProductToCart}=useContext(CartContext)
                       </button>
                     </div>
                   </div>
-                  <div className="flex justify-center items-center gap-6 w-1/2">
+                  <div className="flex justify-center items-center gap-6 w-full md:w-1/2 pt-5">
                   <button
-                    className="rounded-lg bg-transparent  border-green-600 border-[1px] w-[200px] py-3"
+                    className="rounded-lg bg-transparent  border-green-600 border-[1px] w-[200px] py-3 mx-auto"
                     type="submit"
                     onClick={()=>{addprotoCart(product.id)}}
                   > <p className="text-black">Add to Cart</p>

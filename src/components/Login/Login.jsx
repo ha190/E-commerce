@@ -63,7 +63,7 @@ const navigate =useNavigate();
 
   return (
     <>
-      <div className="w-[60%] mx-auto px-14">
+      <div className="w-full mx-auto px-14 md:w-[60%]">
         <div className="pt-32 flex justify-center items-start flex-col">
           <h3 className="text-xl capitalize font-bold px-10 text-left mb-4">
            Login Now
@@ -97,7 +97,7 @@ const navigate =useNavigate();
           </div>
         </div>):null} */}
 
-        <div className="p-8 relative">
+        <div className="p-8 relative w-full">
           <form className="w-full" onSubmit={formik.handleSubmit}>
           
             <div className="w-full mb-3">

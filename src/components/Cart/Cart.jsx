@@ -61,11 +61,11 @@ export default function Cart() {
         <div className="flex justify-between w-full px-5">
           <h1 className="font-semibold text-3xl p-8">Cart Shop</h1>
           <div className="flex justify-center items-center flex-col w-1/4 gap-3">
-         <Link to="/checkout"> <button className="w-[150px] bg-green-600 rounded-lg text-white py-2 px-3">
+         <Link to="/checkout"> <button className="w-[75px] md:w-[150px] bg-green-600 rounded-lg text-white py-2 px-3 ">
             Check Out
           </button></Link>
           <button
-            className="w-[150px] bg-red-600 rounded-lg text-white py-2 px-3"
+            className="w-[75px] md:w-[150px] bg-red-600 rounded-lg text-white py-2 px-3"
             onClick={() => emptyUserCart()}
           >
             Clear Your Cart
@@ -94,7 +94,7 @@ export default function Cart() {
           </div>
         ) : (
           <>
-            <div className="flex justify-between w-full px-11">
+            <div className="flex justify-between w-full px-11 items-center flex-col sm:flex-row">
               <h3 className="font-semibold py-4 mt-5">
                 Total Price: <span className="text-green-600">{cartItems?.totalCartPrice} EGP</span>
               </h3>
@@ -103,9 +103,9 @@ export default function Cart() {
               </h3>
             </div>
             {cartItems?.products.map((product) => (
-              <div key={product.id} className="flex justify-between w-full px-11">
-                <div className="flex justify-between w-full py-10">
-                  <div className="flex justify-start items-center gap-6">
+              <div key={product.id} className="md:flex md:justify-center md:w-full md:px-11">
+                <div className="flex justify-center w-full py-10">
+                  <div className="flex justify-center items-center gap-6 md:justify-start">
                     <img src={product.product.imageCover} alt="" className="w-1/3" />
                     <div>
                       <h3 className="py-4 font-semibold">{product.product.title}</h3>
@@ -118,7 +118,8 @@ export default function Cart() {
                       </button>
                     </div>
                   </div>
-                  <div className="flex justify-center items-center gap-6">
+                  </div>
+                  <div className="flex justify-center items-center gap-6 md:justify-end">
                     <button
                       className="bg-green-600 text-white py-1 px-3 rounded-lg font-bold"
                       onClick={() => updateCartItems(product.product.id, product.count + 1)}
@@ -138,7 +139,7 @@ export default function Cart() {
                     </button>
                   </div>
                 </div>
-              </div>
+            
             ))}
           </>
         )}

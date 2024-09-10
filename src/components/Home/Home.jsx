@@ -11,73 +11,62 @@ import { WishlistContext } from "../WishlistContext/WishlistContext";
 export default function Home() {
   const [products, setProducts] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-  let [loading, setLoading] = useState(false);
-  let [currentid, setcurrentid] = useState(null);
-  let { addProductToCart } = useContext(CartContext);
-  let { addProductToWishlist,getuserWishlist } = useContext(WishlistContext);
+  const [likedProducts, setLikedProducts] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [currentId, setCurrentId] = useState(null);
+  const { addProductToCart } = useContext(CartContext);
+  const { addProductToWishlist, deleteProductfromWishlist, getuserWishlist } = useContext(WishlistContext);
 
-  async function addtoWishlist(id){
-    let wishlist=await addProductToWishlist(id)
- console.log("added to wishlist data base:",wishlist)
-  }
-
-  async function addProducts(id) {
-    let addition = await addProductToCart(id);
-    setcurrentid(id);
-    if (addition.data.status == "success") {
-      setLoading(true);
-      toast(addition.data.message, {
-        duration: 1000,
-        position: "top-center",
-        icon: "👏",
-      });
-      // toast.success(addition.data.message)
-    } else {
-      // toast.error(addition.data.message)
-      setLoading(true);
-      toast(addition.data.message, {
-        duration: 2000,
-        position: "top-center",
-        icon: "🤦‍♀️",
-      });
+  async function fetchUserWishlist() {
+    const res = await getuserWishlist();
+    if (res.data && res.data.data) {
+      const likedIds = res.data.data.map(product => product.id); 
+      setLikedProducts(likedIds);
     }
   }
 
-  // function toggleLike(productId) {
-  //   setLikedProducts((prev) => ({
-  //     ...prev,
-  //     [productId]: !prev[productId],
-  //   }));
-  //   console.log(likedProducts);
-    
-  // }
+  async function toggleWishlist(id) {
+    const isLiked = likedProducts.includes(id);
+    if (isLiked) {
+      await deleteProductfromWishlist(id);
+      setLikedProducts(likedProducts.filter(productId => productId !== id));
+      toast("Removed from wishlist", { duration: 1500, position: "top-center", icon: "🌚" });
+    } else {
+      await addProductToWishlist(id);
+      setLikedProducts([...likedProducts, id]);
+      toast("Added to wishlist", { duration: 1500, position: "top-center", icon: "💞" });
+    }
+  }
+
+  async function addProducts(id) {
+    const addition = await addProductToCart(id);
+    setCurrentId(id);
+    toast(addition.data.message, { duration: 1500, position: "top-center", icon: addition.data.status === "success" ? "👏" : "🤦‍♀️" });
+  }
 
   function getProducts() {
-    axios
-      .get("https://ecommerce.routemisr.com/api/v1/products")
-      .then((res) => {
+    axios.get("https://ecommerce.routemisr.com/api/v1/products")
+      .then(res => {
         setProducts(res.data.data);
-        console.log(res);
       })
-      .catch((res) => {
-        console.log(res);
+      .catch(err => {
+        console.log(err);
       });
   }
 
   useEffect(() => {
     getProducts();
+    fetchUserWishlist(); // Fetch the user's wishlist on mount
   }, []);
 
-  const searchforProduct = products
-    ? products.filter((product) =>
-        product.title.toLowerCase().includes(searchTerm.toLowerCase())
-      )
-    : [];
+  const searchForProduct = products ? products.filter(product =>
+    product.title.toLowerCase().includes(searchTerm.toLowerCase())
+  ) : [];
 
   return (
     <>
-      <MainSlider></MainSlider>
-      <CategoriesSlider></CategoriesSlider>
+      <MainSlider />
+      <CategoriesSlider />
       <div className="w-[80%] mx-auto">
         <input
           type="text"
@@ -92,32 +81,24 @@ export default function Home() {
           </div>
         ) : (
           <div className="flex justify-center items-center gap-5 flex-wrap py-14">
-            {searchforProduct.map((product) => (
+            {searchForProduct.map((product) => (
               <div
                 key={product.id}
-                className="md:w-1/3 lg:w-1/6 p-5 hover:shadow-md hover:shadow-green-500 rounded-lg transition-shadow duration-300 product"
+                className="md:w-1/3 lg:w-1/6 p-5 hover:shadow-md rounded-lg transition-shadow duration-300 product"
               >
-                <Link
-                  to={`/productdetails/${product.id}/${product.category.name}`}
-                >
+                <Link to={`/productdetails/${product.id}/${product.category.name}`}>
                   <img
                     src={product.imageCover}
                     alt=""
                     className="w-full rounded-t-lg"
                   />
-                  <h4 className="text-green-600 font-thin py-3">
-                    {product.category.name}
-                  </h4>
-                  <p className="text-black font-thin">
-                    {product.title.split(" ").slice(0, 2).join(" ")}
-                  </p>
+                  <h4 className="text-green-600 font-thin py-3">{product.category.name}</h4>
+                  <p className="text-black font-thin">{product.title.split(" ").slice(0, 2).join(" ")}</p>
                   <div className="flex justify-between items-center">
                     <p className="text-black font-thin">{product.price} EGP</p>
                     <div className="flex items-center">
                       <i className="fa-solid fa-star text-yellow-400"></i>
-                      <p className="text-[#808080] font-thin py-3">
-                        {product.ratingsAverage}
-                      </p>
+                      <p className="text-[#808080] font-thin py-3">{product.ratingsAverage}</p>
                     </div>
                   </div>
                 </Link>
@@ -127,15 +108,15 @@ export default function Home() {
                     type="submit"
                     onClick={() => addProducts(product.id)}
                   >
-                    {loading && currentid == product.id ? (
+                    {loading && currentId === product.id ? (
                       <i className="fa-solid fa-spinner fa-spin text-lg text-white"></i>
                     ) : (
                       <p className="text-white">Add to Cart</p>
                     )}
                   </button>
                   <i
-                    className={`fa-solid fa-heart text-[grey] text-xl`}
-                    onClick={() => {addtoWishlist(product.id)}}
+                    className={`fa-solid fa-heart text-xl ${likedProducts.includes(product.id) ? 'text-red-500' : 'text-[grey]'}`}
+                    onClick={() => toggleWishlist(product.id)}
                     style={{ cursor: "pointer" }}
                   ></i>
                 </div>

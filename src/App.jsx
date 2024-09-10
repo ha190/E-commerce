@@ -3,7 +3,7 @@
  
 
 import './App.css'
-import { createBrowserRouter,RouterProvider} from 'react-router-dom'
+import { createHashRouter,RouterProvider} from 'react-router-dom'
 
 import Layout from './components/Layout/Layout';
 import Home from './components/Home/Home';
@@ -29,7 +29,7 @@ import CheckOut from './components/CheckOut/CheckOut';
 
 
 function App() {
-  let x=createBrowserRouter([{path:"",element:<Layout/>,
+  let x=createHashRouter([{path:"",element:<Layout/>,
     children:[
     {index:true,element:<Home/>},
     {path:"cart",element:<ProtectedRoutes><Cart/></ProtectedRoutes>},

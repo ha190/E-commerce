@@ -17,6 +17,14 @@ export default function CategoriesSlider() {
     autoplay:true,
     autoplaySpeed: 2000,
    centerPadding:0,
+   responsive: [
+    {
+      breakpoint: 768, 
+      settings: {
+        slidesToShow: 2, 
+      },
+    },
+  ],
   };
 
   function getCategories() {
