@@ -10,7 +10,7 @@ export default function Wishlist() {
   let { deleteProductfromWishlist, getuserWishlist } =
     useContext(WishlistContext);
 const [wishlist,setwishlist]=useState(null)
-let {addProductToCart}=useContext(CartContext)
+let {addProductToCart,numberItems,setnumberItems}=useContext(CartContext)
 
     async function getwishlist(){
       let wishlist = await getuserWishlist();
@@ -19,7 +19,9 @@ let {addProductToCart}=useContext(CartContext)
     }
     async function addprotoCart(id){
       let added = await addProductToCart(id);
-      { toast.success(added.data.message)}
+      { toast.success(added.data.message)
+        setnumberItems(numberItems+1)
+      }
       console.log(added);
     }
     async function deletefromwishlist(id){

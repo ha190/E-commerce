@@ -1,11 +1,11 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import axios from "axios";
-import React, { createContext } from "react";
+import React, { createContext, useState } from "react";
 
 export let WishlistContext = createContext();
 export default function WishlistContextProvider(props){
-
+let [wishnum,setwishnum]=useState(0)
 let headers={token:localStorage.getItem("userToken")}
     function addProductToWishlist(id) {
         return axios
@@ -34,7 +34,9 @@ let headers={token:localStorage.getItem("userToken")}
             `https://ecommerce.routemisr.com/api/v1/wishlist`,
             { headers }
           )
-          .then((res) => res)
+          .then((res) => {
+            setwishnum(res.data.count)
+            return res})
           .catch((err) => err);
       }
 
@@ -45,7 +47,8 @@ let headers={token:localStorage.getItem("userToken")}
             value={{
                 addProductToWishlist,
                 deleteProductfromWishlist,
-                getuserWishlist
+                getuserWishlist,
+                wishnum,setwishnum
             }}
           >
             {props.children}

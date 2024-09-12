@@ -25,6 +25,9 @@ import CartContextProvider, { CartContext } from './components/CartContext/CartC
 import { Toaster } from 'react-hot-toast';
 import WishlistContextProvider, { WishlistContext } from './components/WishlistContext/WishlistContext';
 import CheckOut from './components/CheckOut/CheckOut';
+import VerifyContextProvider, { VerifyContext } from './components/VerifyContext/VerifyContext';
+import Vcode from './components/Vcode/Vcode';
+import ResetPass from './components/ResetPass/ResetPass';
 
 
 
@@ -43,7 +46,11 @@ function App() {
     {path:"login",element:<Login/>},
     {path:"register",element:<Register/>},
     {path:"verify",element:<Verify/>},
-    {path:"checkout",element:<CheckOut/>}
+    {path:"checkout",element:<CheckOut/>},
+    {path:"Vcode",element:<Vcode/>},
+    {path:"Reset",element:<ResetPass/>},
+
+
    
   ]}])
  
@@ -52,9 +59,12 @@ function App() {
   <CounterContextProvider>
    <CartContextProvider>
     <WishlistContextProvider>
+    <VerifyContextProvider>
+  
       <RouterProvider router={x}></RouterProvider>
 
       <Toaster/>
+      </VerifyContextProvider>
       </WishlistContextProvider>
       </CartContextProvider>
       </CounterContextProvider>

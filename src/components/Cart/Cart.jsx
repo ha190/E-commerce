@@ -14,6 +14,8 @@ export default function Cart() {
     deleteProductsFromCart,
     updateCartProductQuantity,
     emptyCart,
+    numberItems,
+    setnumberItems
   } = useContext(CartContext);
   
   const [cartItems, setCartItems] = useState(null);
@@ -38,6 +40,7 @@ export default function Cart() {
   async function deleteCartItems(id) {
     let deletedItems = await deleteProductsFromCart(id);
     setCartItems(deletedItems.data.data);
+    setnumberItems(numberItems-1)
     console.log(deletedItems.data.data);
   }
 
@@ -47,6 +50,7 @@ export default function Cart() {
     } else {
       let deletedItems = await emptyCart();
       setEmpty(deletedItems);
+      setnumberItems(0)
       console.log(deletedItems);
     }
   }

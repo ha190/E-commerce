@@ -45,6 +45,7 @@ export default function CategoriesSlider() {
 
   return (
     <>
+    <div className="w-[80%] mx-auto">
       <div className="pt-28">
         <Slider {...settings}>
           {cat?.map((category) => (
@@ -54,6 +55,7 @@ export default function CategoriesSlider() {
             </div>
           ))}
         </Slider>
+      </div>
       </div>
     </>
   );

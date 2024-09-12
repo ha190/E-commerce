@@ -11,7 +11,7 @@ export default function Login() {
   let {userLogin,setuserLogin}=useContext(UserContext)
   let validationSchema = Yup.object().shape({
     
-    email: Yup.string().required("Email is required").email("invali email"),
+    email: Yup.string().required("Email is required").email("invalid email"),
     password: Yup.string()
       .required("Password is required")
       .matches(

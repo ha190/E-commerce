@@ -14,7 +14,7 @@ export default function Register() {
       .max(20, "maximum length is 20")
       .min(3, "min length is 3")
       .required("Name is required"),
-    email: Yup.string().required("Email is required").email("invali email"),
+    email: Yup.string().required("Email is required").email("invalid email"),
     phone: Yup.string()
       .matches(/^01[0125][0-9]{8}$/, "invalid phone number")
       .required("Phone is required"),

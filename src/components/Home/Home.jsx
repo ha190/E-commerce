@@ -14,8 +14,8 @@ export default function Home() {
   const [likedProducts, setLikedProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currentId, setCurrentId] = useState(null);
-  const { addProductToCart } = useContext(CartContext);
-  const { addProductToWishlist, deleteProductfromWishlist, getuserWishlist } = useContext(WishlistContext);
+  const { addProductToCart,numberItems,setnumberItems} = useContext(CartContext);
+  const { addProductToWishlist, deleteProductfromWishlist, getuserWishlist,wishnum,setwishnum } = useContext(WishlistContext);
 
   async function fetchUserWishlist() {
     const res = await getuserWishlist();
@@ -30,10 +30,12 @@ export default function Home() {
     if (isLiked) {
       await deleteProductfromWishlist(id);
       setLikedProducts(likedProducts.filter(productId => productId !== id));
+      setwishnum(wishnum-1)
       toast("Removed from wishlist", { duration: 1500, position: "top-center", icon: "🌚" });
     } else {
       await addProductToWishlist(id);
       setLikedProducts([...likedProducts, id]);
+      setwishnum(wishnum+1)
       toast("Added to wishlist", { duration: 1500, position: "top-center", icon: "💞" });
     }
   }
@@ -41,6 +43,7 @@ export default function Home() {
   async function addProducts(id) {
     const addition = await addProductToCart(id);
     setCurrentId(id);
+    setnumberItems(numberItems+1)
     toast(addition.data.message, { duration: 1500, position: "top-center", icon: addition.data.status === "success" ? "👏" : "🤦‍♀️" });
   }
 

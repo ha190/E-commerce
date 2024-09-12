@@ -13,10 +13,10 @@ export default function ProductDetails() {
   const [currentId, setCurrentId] = useState(null);
   const [likedProducts, setLikedProducts] = useState([]);
   const [loading, setLoading] = useState(false);
-  const { addProductToCart } = useContext(CartContext);
+  const { addProductToCart,numberItems,setnumberItems} = useContext(CartContext);
   const [product, setProduct] = useState(null);
   const [relatedProducts, setRelatedProducts] = useState([]);
-  const { addProductToWishlist, getuserWishlist, deleteProductfromWishlist } = useContext(WishlistContext);
+  const { addProductToWishlist, getuserWishlist, deleteProductfromWishlist,wishnum,setwishnum } = useContext(WishlistContext);
 
   useEffect(() => {
     fetchUserWishlist();
@@ -37,10 +37,12 @@ export default function ProductDetails() {
     if (isLiked) {
       await deleteProductfromWishlist(productId);
       setLikedProducts(likedProducts.filter(id => id !== productId));
+      setwishnum(wishnum-1)
       toast("Removed from wishlist", { duration: 1500, position: "top-center", icon: "🌚" });
     } else {
       await addProductToWishlist(productId);
       setLikedProducts([...likedProducts, productId]);
+      setwishnum(wishnum+1)
       toast("Added to wishlist", { duration: 1500, position: "top-center", icon: "💞" });
     }
   }
@@ -54,6 +56,7 @@ export default function ProductDetails() {
       position: "top-center",
       icon: addition.data.status === "success" ? "👏" : "🤦‍♀️",
     });
+    setnumberItems(numberItems+1)
     setLoading(false);
   }
 

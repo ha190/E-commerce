@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { CartContext } from "../CartContext/CartContext";
 import toast from "react-hot-toast";
 import { WishlistContext } from "../WishlistContext/WishlistContext";
+import { number } from "yup";
 
 export default function Products() {
   const [products, setProducts] = useState(null);
@@ -12,46 +13,33 @@ export default function Products() {
   let [loading, setLoading] = useState(false);
   const [likedProducts, setLikedProducts] = useState([]);
   let [currentid, setcurrentid] = useState(null);
-  let { addProductToCart } = useContext(CartContext);
-  let { addProductToWishlist,getuserWishlist ,deleteProductfromWishlist} = useContext(WishlistContext);
+  let { addProductToCart,numberItems,setnumberItems } = useContext(CartContext);
+  let { addProductToWishlist,getuserWishlist ,deleteProductfromWishlist,wishnum,setwishnum} = useContext(WishlistContext);
 
 
   
-  async function fetchUserWishlist() {
-    const res = await getuserWishlist();
-    if (res.data && res.data.data) {
-      const likedIds = res.data.data.map(product => product.id); 
-      setLikedProducts(likedIds);
-    }
-  }
 
   async function toggleWishlist(id) {
     const isLiked = likedProducts.includes(id);
     if (isLiked) {
       await deleteProductfromWishlist(id);
+      setwishnum(wishnum-1)
       setLikedProducts(likedProducts.filter(productId => productId !== id));
       toast("Removed from wishlist", { duration: 1500, position: "top-center", icon: "🌚" });
     } else {
       await addProductToWishlist(id);
       setLikedProducts([...likedProducts, id]);
+      setwishnum(wishnum+1)
       toast("Added to wishlist", { duration: 1500, position: "top-center", icon: "💞" });
     }
   }
-  async function addtoWishlist(id){
-    let wishlist=await addProductToWishlist(id)
- console.log("added to wishlist data base:",wishlist)
- toast(wishlist.data.message, {
-  duration: 1500,
-  position: "top-center",
-  icon:"💞",
-});
-  }
-
+ 
   async function addProducts(id) {
     let addition = await addProductToCart(id);
     setcurrentid(id);
     if (addition.data.status == "success") {
       setLoading(true);
+      setnumberItems(numberItems+1)
       toast(addition.data.message, {
         duration: 1000,
         position: "top-center",

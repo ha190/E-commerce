@@ -4,12 +4,12 @@ import logo from "../../assets/freshcart-logo.svg";
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../UserContext/UserContext";
 import { CartContext } from "../CartContext/CartContext";
+import { WishlistContext } from "../WishlistContext/WishlistContext";
 
 export default function Navbar() {
   const { userLogin, setuserLogin } = useContext(UserContext);
-  const { updateCartProductQuantity } = useContext(CartContext);
-
-  const [numOfCartItems, setNumOfCartItems] = useState(0);
+  const { updateCartProductQuantity,numberItems,setnumberItems } = useContext(CartContext); 
+  const { wishnum,setwishnum } = useContext(WishlistContext); 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   let navigate = useNavigate();
 
@@ -22,7 +22,6 @@ export default function Navbar() {
   useEffect(() => {
     const updateCartCount = async () => {
       const result = await updateCartProductQuantity();
-      setNumOfCartItems(result.numOfCartItems || 0);
     };
 
     updateCartCount();
@@ -49,7 +48,10 @@ export default function Navbar() {
             <ul className={`md:flex md:flex-row md:gap-4 ${isMenuOpen ? "block" : "hidden"}`}>
               <li><Link to="">Home</Link></li>
               <li><Link to="cart">Cart</Link></li>
-              <li><Link to="wishlist">Wishlist</Link></li>
+              <li className="relative"><Link to="wishlist">Wishlist</Link>
+              <div className="absolute top-[0px] right-[15px]  md:top-[-10px] md:right-[-15px] w-5 h-5 bg-green-600 rounded-md font-bold text-white flex justify-center items-center p-1">
+                   {wishnum}
+                    </div></li>
               <li><Link to="products">Products</Link></li>
               <li><Link to="categories">Categories</Link></li>
               <li><Link to="brands">Brands</Link></li>
@@ -58,7 +60,7 @@ export default function Navbar() {
                   <Link to="cart">
                     <i className="fa-solid fa-cart-shopping text-2xl mt-3 md:mt-0"></i>
                     <div className="absolute top-[0px] right-[15px]  md:top-[-15px] md:right-[-5px] w-5 h-5 bg-green-600 rounded-md font-bold text-white flex justify-center items-center p-1">
-                      {numOfCartItems}
+                   {numberItems}
                     </div>
                   </Link>
                 </div>
